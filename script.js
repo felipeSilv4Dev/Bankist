@@ -76,6 +76,35 @@ const displayMovements = function (moviments) {
 
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+
+  labelBalance.textContent = `${balance}€`;
+};
+calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+
+  labelSumIn.textContent = `${incomes}€`;
+
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out)}€`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter(int => int >= 1)
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = interest;
+};
+
+calcDisplaySummary(account1.movements);
+
 const creatUsernames = function (accs) {
   accs.forEach(acc => {
     acc.creatUsername = acc.owner
@@ -101,3 +130,77 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+
+// const deposits = movements.filter(function (mov) {
+//   return mov > 0;
+// });
+// console.log(deposits);
+
+// const withdrawals = movements.filter(function (mov) {
+//   return mov < 0;
+// });
+// console.log(withdrawals);
+
+// const max = movements.reduce((acc, mov) => {
+//   if (acc > mov) return acc;
+//   else return mov;
+// }, movements[0]);
+
+// console.log(max);
+// const withdrawals2 = [];
+// for (const mov of movements) if (mov < 0) withdrawals2.push(mov);
+
+// Desafio de codificação #2
+
+// Voltemos ao estudo de Julia e Kate sobre cachorros. Desta vez, eles querem converter
+// idades caninas para idades humanas e calcule a idade média dos cães em seu estudo.
+// Suas tarefas:
+
+// Crie uma função 'calcAverageHumanAge', que aceita um array de dog's
+// idades ('idades'), e faz as seguintes coisas em ordem:
+
+// 1. Calcule a idade do cachorro em anos humanos usando a seguinte fórmula: se o cachorro é
+// <= 2 anos, humanAge = 2 * dogAge. Se o cão tiver > 2 anos,
+// idade humana = 16 + idade do cachorro * 4
+
+// 2. Exclua todos os cães com menos de 18 anos humanos (o mesmo que
+// manter cães com pelo menos 18 anos de idade)
+
+// 3. Calcule a idade média humana de todos os cães adultos (você já deve saber
+// de outros desafios como calculamos as médias  )
+
+// 4. Execute a função para ambos os conjuntos de dados de teste
+
+// Dados de teste:
+// § Dados 1: [5, 2, 4, 1, 15, 8, 3]
+// § Dados 2: [16, 6, 10, 5, 6, 1, 4]
+// BOA SORTE
+
+// const calcAverageHumanAge = function (ageDogs) {
+//   const humanAges = ageDogs.map(age => (age <= 2 ? age * 2 : 16 + age * 4));
+
+//   const olderDogs = humanAges.filter(dogs => dogs > 18);
+
+//   console.log(humanAges);
+//   console.log(olderDogs);
+//   const averageDogs =
+//     olderDogs.reduce((acc, age) => {
+//       return acc + age;
+//     }, 0) / olderDogs.length;
+
+//   return averageDogs;
+// };
+
+// const avg1 = calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+// const avg2 = calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+
+// console.log(avg1);
+// console.log(avg2);
+
+// const eurToUsd = 1.1;
+// const totalDepositsUSD = movements
+//   .filter(mov => mov > 0)
+//   .map(mov => mov * eurToUsd)
+//   .reduce((acc, mov) => acc + mov, 0);
+
+// console.log(totalDepositsUSD);
