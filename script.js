@@ -20,6 +20,7 @@ const account1 = {
     '2023-06-03T23:36:17.929Z',
     '2023-06-01T10:51:36.790Z',
   ],
+  locale: 'en-US',
 };
 
 const account2 = {
@@ -37,6 +38,7 @@ const account2 = {
     '2023-06-25T18:49:59.371Z',
     '2023-05-26T12:01:20.894Z',
   ],
+  locale: 'fr-FR',
 };
 
 const account3 = {
@@ -54,6 +56,8 @@ const account3 = {
     '2023-03-11T23:36:17.929Z',
     '2023-06-04T10:51:36.790Z',
   ],
+
+  locale: 'pt-PT',
 };
 
 const account4 = {
@@ -68,6 +72,7 @@ const account4 = {
     '2023-06-04T18:49:59.371Z',
     '2023-06-01T12:01:20.894Z',
   ],
+  locale: 'br-PT',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -99,22 +104,21 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 ////////////////////////////////////////////////////////////////////////////
 // Functions
-const formatMovementDate = function (date) {
+const formatMovementDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs((date2 - date1) / (1000 * 60 * 60 * 24)));
 
   const daysPassed = calcDaysPassed(new Date(), date);
 
-  console.log(daysPassed);
-
   if (daysPassed === 0) return 'today';
   if (daysPassed === 1) return 'yesturday';
   if (daysPassed <= 7) return `${daysPassed} days ago`;
   else {
-    const day = `${date.getDate()}`.padStart(2, 0);
-    const month = `${date.getMonth() + 1}`.padStart(2, 0);
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    // const day = `${date.getDate()}`.padStart(2, 0);
+    // const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    // const year = date.getFullYear();
+    // return `${day}/${month}/${year}`;
+    return new Intl.DateTimeFormat(locale).format(date);
   }
 };
 
@@ -128,7 +132,7 @@ const displayMovements = function (acc, sort = false) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const date = new Date(acc.movementsDates[i]);
-    const displayDate = formatMovementDate(date);
+    const displayDate = formatMovementDate(date, acc.locale);
 
     const html = /*html */ `
 	 <div class="movements__row">
@@ -204,6 +208,30 @@ btnLogin.addEventListener(`click`, function (e) {
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
+
+    // creat current date and time
+    // Experimenting API
+    const now = new Date();
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+    };
+    // const local = navigator.language;
+    labelDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
+    // const now = new Date();
+    // const day = `${now.getDate()}`.padStart(2, 0);
+    // const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    // const year = now.getFullYear();
+    // const hour = `${now.getHours()}`.padStart(2, 0);
+    // const min = `${now.getMinutes()}`.padStart(2, 0);
+    // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
@@ -297,15 +325,14 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
-const future = new Date(2037, 10, 19, 15, 23);
+// const future = new Date(2037, 10, 19, 15, 23);
 
-console.log(Number(+future));
-const calcDaysPassed = (date1, date2) =>
-  Math.abs((date2 - date1) / (1000 * 60 * 60 * 24));
+// const calcDaysPassed = (date1, date2) =>
+//   Math.abs((date2 - date1) / (1000 * 60 * 60 * 24));
 
-const days1 = calcDaysPassed(
-  new Date(2037, 3, 4),
-  new Date(2037, 3, 14, 10, 8)
-);
+// const days1 = calcDaysPassed(
+//   new Date(2037, 3, 4),
+//   new Date(2037, 3, 14, 10, 8)
+// );
 
 // console.log(days1);
